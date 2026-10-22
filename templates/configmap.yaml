@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: php-security-hardening
+data:
+  zz-security-hardening.conf: |
+    [www]
+    php_admin_value[memory_limit] = {{ .Values.phpHardening.memoryLimit }}
+    php_admin_value[post_max_size] = {{ .Values.phpHardening.postMaxSize }}
+    php_admin_value[upload_max_filesize] = {{ .Values.phpHardening.uploadMaxFilesize }}
+    php_admin_value[session.upload_progress.enabled] = {{ if .Values.phpHardening.sessionUploadProgressEnabled }}1{{ else }}0{{ end }}
+    php_admin_value[fatal_error_backtraces] = {{ if .Values.phpHardening.fatalErrorBacktraces }}1{{ else }}0{{ end }}

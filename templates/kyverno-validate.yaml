@@ -1,0 +1,23 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-php-hardening
+spec:
+  validationFailureAction: {{ .Values.enforcement.mode }}
+  rules:
+    - name: require-hardening-mount
+      match:
+        any:
+          - resources:
+              kinds: [Pod]
+      preconditions:
+        any:
+          - key: "{{ request.object.spec.containers[].image }}"
+            operator: AnyIn
+            value: ["{{ .Values.enforcement.phpImagePattern }}"]
+      validate:
+        message: "PHP pods must mount the php-security-hardening ConfigMap (CVE-2026-109618/109619 mitigation)"
+        pattern:
+          spec:
+            volumes:
+              - name: php-hardening

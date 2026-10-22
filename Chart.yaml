@@ -1,0 +1,4 @@
+apiVersion: v2
+name: php-security-baseline
+description: Cluster-wide PHP hardening config for CVE-2026-109618 / CVE-2026-109619, with Kyverno enforcement
+version: 0.1.0

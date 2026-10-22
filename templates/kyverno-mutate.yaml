@@ -1,0 +1,29 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: inject-php-hardening
+spec:
+  rules:
+    - name: mount-hardening-config
+      match:
+        any:
+          - resources:
+              kinds: [Pod]
+      preconditions:
+        any:
+          - key: "{{ request.object.spec.containers[].image }}"
+            operator: AnyIn
+            value: ["{{ .Values.enforcement.phpImagePattern }}"]
+      mutate:
+        patchStrategicMerge:
+          spec:
+            volumes:
+              - name: php-hardening
+                configMap:
+                  name: php-security-hardening
+            containers:
+              - (name): "*"
+                volumeMounts:
+                  - name: php-hardening
+                    mountPath: /usr/local/etc/php-fpm.d/zz-security-hardening.conf
+                    subPath: zz-security-hardening.conf

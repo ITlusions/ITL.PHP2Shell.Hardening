@@ -1,0 +1,10 @@
+phpHardening:
+  memoryLimit: "-1"
+  postMaxSize: "32M"
+  uploadMaxFilesize: "16M"
+  sessionUploadProgressEnabled: false
+  fatalErrorBacktraces: false
+
+enforcement:
+  phpImagePattern: "*php*"
+  mode: enforce   # or "audit" to only warn, not block
